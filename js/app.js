@@ -159,6 +159,67 @@ class BookQuoteShorts {
                 this.previousQuote();
             }
         });
+
+        // Touch/swipe support for vertical navigation
+        this.addVerticalTouchSupport();
+    }
+
+
+    addVerticalTouchSupport() {
+        let startY = 0;
+        let startX = 0;
+        let isScrolling = false;
+        
+        // Add touch events to the swipe area specifically
+        const swipeArea = document.getElementById('swipeArea');
+        
+        // Touch event start
+        this.shortsContainer.addEventListener('touchstart', (e) => {
+            startY = e.touches[0].clientY;
+            startX = e.touches[0].clientX;
+            isScrolling = false;
+        });
+
+        this.shortsContainer.addEventListener('touchmove', (e) => {
+            if (!startY || !startX) return;
+            
+            const currentY = e.touches[0].clientY;
+            const currentX = e.touches[0].clientX;
+            
+            const diffY = startY - currentY;
+            const diffX = startX - currentX;
+            
+            // Determine if this is a vertical scroll
+            if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 10) {
+                isScrolling = true;
+                e.preventDefault();
+            }
+        });
+
+        // Touch event end
+        this.shortsContainer.addEventListener('touchend', (e) => {
+            if (!startY || !isScrolling) {
+                startY = 0;
+                startX = 0;
+                return;
+            }
+            
+            const endY = e.changedTouches[0].clientY;
+            const diffY = startY - endY;
+            
+            // Swipe threshold
+            if (Math.abs(diffY) > 50) {
+                if (diffY > 0) {
+                    this.nextQuote();
+                } else {
+                    this.previousQuote();
+                }
+            }
+            
+            startY = 0;
+            startX = 0;
+            isScrolling = false;
+        });
     }
 
     showQuote(index, direction = 'fade') {

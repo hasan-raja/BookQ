@@ -14,3 +14,4 @@ A simple web app that displays book quotes like short-form content (reels). Navi
 - **Auto Play Functionality**: Play the quote short for few seconds and move to next quotes with progress bar
 - **Keyboard Navigation**: Use arrow keys and spacebar for navigation
 - **Mouse wheel Navigation**: Use mouse wheel for navigation
+- **Touch Support**: Swipe gestures for mobile devices
