@@ -14,6 +14,9 @@ class BookQuoteShorts {
         this.bindEvents();
         this.loadLikesFromStorage();
 
+        // Check URL parameters and navigate to specific quote if found
+        this.handleURLParams();
+
         //Show the first quote
         this.showQuote(this.currentIndex);
     }
@@ -49,6 +52,30 @@ class BookQuoteShorts {
         } catch (error) {
             console.error('Error saving likes to storage:', error);
         }
+    }
+
+
+    handleURLParams() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const quoteId = urlParams.get('quote');
+        
+        //Ensure quote ID is valid and quotes are loaded
+        if (quoteId && typeof quotes !== 'undefined' && quotes) {
+            const quoteIndex = quotes.findIndex(quote => quote.id === quoteId);
+            
+            //Ensure quote is found and set the current index
+            if (quoteIndex !== -1) {
+                this.currentIndex = quoteIndex;
+                return true; 
+            }
+        } 
+        return false; 
+    }
+
+    updateURL(quoteId) {
+        const url = new URL(window.location);
+        url.searchParams.set('quote', quoteId);
+        window.history.replaceState({}, '', url);
     }
 
     bindEvents() {
@@ -107,6 +134,9 @@ class BookQuoteShorts {
         this.quoteText.textContent = quote.text;
         this.authorName.textContent = quote.author;
         this.bookTitle.textContent = quote.book;
+
+        // Update URL with quote ID
+        this.updateURL(quote.id);
 
         //Remove all existing animations
         this.shortItem.className = 'short-item';
