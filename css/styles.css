@@ -1,0 +1,121 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #fff;
+    color: #000;
+    overflow: hidden;
+    height: 100vh;
+    user-select: none;
+}
+
+/* App Name */
+.app-name {
+    position: fixed;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+    pointer-events: none;
+    text-align: center;
+}
+
+.app-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #000;
+    text-transform: none;
+    letter-spacing: 3px;
+    margin-bottom: 4px;
+    padding: 8px 16px;
+    border: 2px solid #000;
+    background: #fff;
+    border-radius: 20px;
+    display: inline-block;
+}
+
+.app-description {
+    font-size: 12px;
+    font-weight: 300;
+    color: #666;
+    text-transform: none;
+    letter-spacing: 1px;
+    line-height: 1.2;
+    margin-top: 8px;
+}
+
+/* Layout */
+.main-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+}
+
+.shorts-container {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.short-item {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.6s ease;
+}
+
+/* Quote Container */
+.quote-container {
+    text-align: center;
+    padding: 60px 40px;
+    max-width: 80%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.quote-text {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 300;
+    line-height: 1.4;
+    margin-bottom: 50px;
+    color: #000;
+    font-style: italic;
+}
+
+.quote-meta {
+    text-align: center;
+    margin-top: 30px;
+    border-top: 1px solid #000;
+    padding-top: 20px;
+}
+
+.author {
+    font-size: clamp(1.1rem, 3vw, 1.5rem);
+    font-weight: 400;
+    margin-bottom: 8px;
+    color: #000;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.book-title {
+    font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+    color: #666;
+    font-style: italic;
+    font-weight: 300;
+}

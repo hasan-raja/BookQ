@@ -1,5 +1,9 @@
 # BookQ
 
-## Book Quote Shorts
+# Book Quote Shorts 📚🎬
 
 A simple web app that displays book quotes like short-form content (reels). Navigate through inspiring quotes from famous books with smooth transitions and interactive features.
+
+## ✨ Features
+
+- **Quote Display**: Shows inspiring quotes with author name and book title
