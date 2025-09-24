@@ -77,6 +77,11 @@ body {
     transition: all 0.6s ease;
 }
 
+/* Short Item States */
+.short-item.active { opacity: 1; transform: translateY(0); }
+.short-item.slide-up-in { opacity: 0; transform: translateY(100%); animation: slideUpIn 0.6s ease forwards; }
+.short-item.slide-down-in { opacity: 0; transform: translateY(-100%); animation: slideDownIn 0.6s ease forwards; }
+
 /* Quote Container */
 .quote-container {
     text-align: center;
@@ -119,3 +124,74 @@ body {
     font-style: italic;
     font-weight: 300;
 }
+
+/* Action Panel */
+.action-panel {
+    position: fixed;
+    right: 30px;
+    bottom: 120px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+/* Buttons */
+.swipe-hint  {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border: 2px solid #000;
+    border-radius: 50%;
+    color: #000;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.swipe-hint:hover {
+    background: #f5f5f5;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.swipe-hint:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Tooltips */
+[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    right: 70px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #000;
+    color: #fff;
+    padding: 10px 15px;
+    border: 1px solid #000;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+[title]:hover::before {
+    content: '';
+    position: absolute;
+    right: 58px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 6px solid transparent;
+    border-left-color: #000;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+/* Animations */
+@keyframes slideUpIn { to { opacity: 1; transform: translateY(0); } }
+@keyframes slideDownIn { to { opacity: 1; transform: translateY(0); } }
