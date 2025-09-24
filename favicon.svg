@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Book icon with Q -->
+  <rect x="4" y="6" width="20" height="20" rx="2" fill="#000" stroke="#000" stroke-width="1"/>
+  <rect x="6" y="8" width="16" height="16" rx="1" fill="#fff"/>
+  
+  <!-- Letter Q -->
+  <circle cx="14" cy="14" r="4" fill="none" stroke="#000" stroke-width="2"/>
+  <path d="M16 16l2 2" stroke="#000" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- Book pages lines -->
+  <line x1="8" y1="12" x2="20" y2="12" stroke="#000" stroke-width="0.5" opacity="0.3"/>
+  <line x1="8" y1="14" x2="18" y2="14" stroke="#000" stroke-width="0.5" opacity="0.3"/>
+  <line x1="8" y1="16" x2="20" y2="16" stroke="#000" stroke-width="0.5" opacity="0.3"/>
+  <line x1="8" y1="18" x2="16" y2="18" stroke="#000" stroke-width="0.5" opacity="0.3"/>
+</svg>

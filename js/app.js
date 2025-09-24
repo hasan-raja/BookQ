@@ -475,7 +475,6 @@ class BookQuoteShorts {
 document.addEventListener("DOMContentLoaded", () => {
     //Small delay to ensure the DOM is loaded
     setTimeout(() => {
-        const bookQuoteShorts = new BookQuoteShorts();
-        console.log(quotes.length);
+        new BookQuoteShorts();
     }, 100);
 });
