@@ -124,6 +124,29 @@ class BookQuoteShorts {
         this.likeBtn.addEventListener('click', () => this.toggleLike());
         this.shareBtn.addEventListener('click', () => this.shareQuote());
         this.playPauseBtn.addEventListener('click', () => this.toggleAutoPlay());
+
+         // Keyboard navigation
+         document.addEventListener('keydown', (e) => {
+            switch(e.key) {
+                // Next quote
+                case 'ArrowUp':
+                case 'ArrowRight':
+                    e.preventDefault();
+                    this.nextQuote();
+                    break;
+                // Previous quote
+                case 'ArrowDown':
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    this.previousQuote();
+                    break;
+                // Toggle auto play
+                case ' ':
+                    e.preventDefault();
+                    this.toggleAutoPlay();
+                    break;
+            }
+        });
     }
 
     showQuote(index, direction = 'fade') {
