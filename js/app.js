@@ -27,6 +27,7 @@ class BookQuoteShorts {
         this.bookTitle = document.getElementById('bookTitle');
         this.likeBtn = document.getElementById('likeBtn');
         this.likeCount = document.getElementById('likeCount');
+        this.shareBtn = document.getElementById('shareBtn');
     }
 
     loadLikesFromStorage() {
@@ -77,6 +78,7 @@ class BookQuoteShorts {
 
         // Action buttons
         this.likeBtn.addEventListener('click', () => this.toggleLike());
+        this.shareBtn.addEventListener('click', () => this.shareQuote());
     }
 
     showQuote(index, direction = 'fade') {
@@ -181,6 +183,35 @@ class BookQuoteShorts {
         this.likeBtn.classList.toggle('liked', isLiked);
         this.likeCount.textContent = isLiked ? '1' : '0';
         
+    }
+
+    shareQuote() {
+        const quote = quotes[this.currentIndex];
+        const shareText = `"${quote.text}" - ${quote.author}, ${quote.book}`;
+        const shareUrl = `${window.location.origin}${window.location.pathname}?quote=${quote.id}`;
+        
+        if (navigator.share) {
+            navigator.share({
+                title: 'Book Quote Shorts',
+                text: shareText,
+                url: shareUrl
+            });
+        } else {
+            // Fallback: copy to clipboard with URL
+            const fullShareText = `${shareText}\n\nView this quote: ${shareUrl}`;
+            navigator.clipboard.writeText(fullShareText).then(() => {
+                this.showNotification('Quote and link copied to clipboard!');
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = fullShareText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                this.showNotification('Quote and link copied to clipboard!');
+            });
+        }
     }
          
 }
