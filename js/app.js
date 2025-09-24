@@ -4,6 +4,10 @@ class BookQuoteShorts {
         this.totalQuotes = 0;
         this.currentIndex = 0;
         this.likes = new Map();
+        this.isPlaying = false;
+        this.autoPlayInterval = null;
+        this.autoPlayDelay = 4000; // 4 seconds for shorts
+        this.pausedProgress = 0;
 
         // Set total quotes count
         if (typeof quotes !== 'undefined' && quotes) {
@@ -31,6 +35,9 @@ class BookQuoteShorts {
         this.likeBtn = document.getElementById('likeBtn');
         this.likeCount = document.getElementById('likeCount');
         this.shareBtn = document.getElementById('shareBtn');
+        this.playPauseBtn = document.getElementById('playPauseBtn');
+        this.playIcon = this.playPauseBtn.querySelector('.play-icon');
+        this.pauseIcon = this.playPauseBtn.querySelector('.pause-icon');
     }
 
     loadLikesFromStorage() {
@@ -106,6 +113,7 @@ class BookQuoteShorts {
         // Action buttons
         this.likeBtn.addEventListener('click', () => this.toggleLike());
         this.shareBtn.addEventListener('click', () => this.shareQuote());
+        this.playPauseBtn.addEventListener('click', () => this.toggleAutoPlay());
     }
 
     showQuote(index, direction = 'fade') {
@@ -154,6 +162,9 @@ class BookQuoteShorts {
 
         //Update like button
         this.updateLikeButton();
+
+        // Reset paused progress for new quote
+        this.pausedProgress = 0;
     }
 
     nextQuote() {
@@ -242,6 +253,57 @@ class BookQuoteShorts {
                 this.showNotification('Quote and link copied to clipboard!');
             });
         }
+    }
+
+    toggleAutoPlay() {
+        if (this.isPlaying) {
+            this.stopAutoPlay();
+        } else {
+            this.startAutoPlay();
+        }
+    }
+
+    stopAutoPlay() {
+        this.isPlaying = false;
+        this.playIcon.style.display = 'block';
+        this.pauseIcon.style.display = 'none';
+        
+        if (this.autoPlayInterval) {
+            clearTimeout(this.autoPlayInterval);
+            this.autoPlayInterval = null;
+        }
+        
+        // Save current progress before stopping
+        if (this.progressAnimation) {
+            const currentProgress = parseFloat(this.progressBar.style.width) || 0;
+            this.pausedProgress = currentProgress;
+        }
+        
+    }
+
+    startAutoPlay() {
+        this.isPlaying = true;
+        this.playIcon.style.display = 'none';
+        this.pauseIcon.style.display = 'block';
+        
+        // Start the auto-play loop
+        this.scheduleNextQuote();
+    }
+
+    scheduleNextQuote() {
+        if (!this.isPlaying) return;
+        
+        // Calculate remaining time based on paused progress
+        const remainingTime = this.autoPlayDelay - (this.pausedProgress * this.autoPlayDelay / 100);
+        
+        // Set timeout for next quote based on remaining time
+        this.autoPlayInterval = setTimeout(() => {
+            if (this.isPlaying) {
+                this.nextQuote();
+                // Schedule the next quote after this one
+                this.scheduleNextQuote();
+            }
+        }, remainingTime);
     }
          
 }
