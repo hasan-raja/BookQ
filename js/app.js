@@ -8,6 +8,14 @@ class BookQuoteShorts {
         this.autoPlayInterval = null;
         this.autoPlayDelay = 4000; // 4 seconds for shorts
         this.pausedProgress = 0;
+        this.progressAnimation = null;
+        this.progressStartTime = null;
+        this.ANIMATION_DURATION = 200; // Heart animation duration in ms
+        this.FRAME_RATE = 16; // 60fps (1000ms / 60fps = 16.67ms per frame)
+        this.PROGRESS_ANIMATION_DELAY = 100; // Progress bar reset transition delay
+        this.HEART_SCALE_NORMAL = 1; // Normal heart scale
+        this.HEART_SCALE_ANIMATED = 1.3; // Heart scale during animation
+        this.PROGRESS_MAX = 100; // Maximum progress percentage
 
         // Set total quotes count
         if (typeof quotes !== 'undefined' && quotes) {
@@ -38,6 +46,8 @@ class BookQuoteShorts {
         this.playPauseBtn = document.getElementById('playPauseBtn');
         this.playIcon = this.playPauseBtn.querySelector('.play-icon');
         this.pauseIcon = this.playPauseBtn.querySelector('.pause-icon');
+        this.progressBar = document.getElementById('progressBar');
+
     }
 
     loadLikesFromStorage() {
@@ -165,6 +175,14 @@ class BookQuoteShorts {
 
         // Reset paused progress for new quote
         this.pausedProgress = 0;
+
+        // Reset progress bar for new quote
+        this.resetProgressBar();
+
+         // Start progress animation if auto-playing
+         if (this.isPlaying) {
+            this.startProgressAnimation();
+        }
     }
 
     nextQuote() {
@@ -206,13 +224,13 @@ class BookQuoteShorts {
 
     animateLike() {
         const heart = this.likeBtn.querySelector('svg');
-        heart.style.transform = 'scale(1.3)';
+        heart.style.transform = `scale(${this.HEART_SCALE_ANIMATED})`;
         heart.style.color = '#000';
 
         setTimeout(() => {
-            heart.style.transform = 'scale(1)';
+            heart.style.transform = `scale(${this.HEART_SCALE_NORMAL})`;
             heart.style.color = '';
-        }, 200);
+        }, this.ANIMATION_DURATION);
     }
 
     updateLikeButton() {
@@ -277,6 +295,8 @@ class BookQuoteShorts {
         if (this.progressAnimation) {
             const currentProgress = parseFloat(this.progressBar.style.width) || 0;
             this.pausedProgress = currentProgress;
+            clearInterval(this.progressAnimation);
+            this.progressAnimation = null;
         }
         
     }
@@ -288,6 +308,8 @@ class BookQuoteShorts {
         
         // Start the auto-play loop
         this.scheduleNextQuote();
+        this.startProgressAnimation();
+
     }
 
     scheduleNextQuote() {
@@ -304,6 +326,51 @@ class BookQuoteShorts {
                 this.scheduleNextQuote();
             }
         }, remainingTime);
+    }
+
+    startProgressAnimation() {
+        // Clear any existing progress animation
+        if (this.progressAnimation) {
+            clearInterval(this.progressAnimation);
+        }
+        
+        // Calculate remaining time based on paused progress
+        const remainingTime = this.autoPlayDelay - (this.pausedProgress * this.autoPlayDelay / 100);
+        const startProgress = this.pausedProgress;
+        
+        // Set initial progress
+        this.progressBar.style.width = startProgress + '%';
+        this.progressBar.style.transition = 'none';
+        
+        // Start smooth progress animation from current position
+        let progress = startProgress;
+        const totalFrames = Math.ceil(remainingTime / this.FRAME_RATE); // 60fps
+        const increment = (this.PROGRESS_MAX - startProgress) / totalFrames;
+        
+        this.progressStartTime = Date.now();
+        let frameCount = 0;
+        
+        this.progressAnimation = setInterval(() => {
+            frameCount++;
+            progress = startProgress + (increment * frameCount);
+            
+            if (progress >= this.PROGRESS_MAX || frameCount >= totalFrames) {
+                progress = this.PROGRESS_MAX;
+                clearInterval(this.progressAnimation);
+                this.pausedProgress = 0; // Reset for next quote
+            }
+            this.progressBar.style.width = progress + '%';
+        }, this.FRAME_RATE); 
+    }
+
+    resetProgressBar() {
+        // Clear any existing progress animation
+        if (this.progressAnimation) {
+            clearInterval(this.progressAnimation);
+        }
+        this.progressBar.style.width = '0%';
+        this.progressBar.style.transition = `width ${this.PROGRESS_ANIMATION_DELAY}ms linear`;
+        this.pausedProgress = 0; // Reset paused progress for new quote
     }
          
 }
