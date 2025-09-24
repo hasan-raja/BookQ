@@ -125,8 +125,8 @@ class BookQuoteShorts {
         this.shareBtn.addEventListener('click', () => this.shareQuote());
         this.playPauseBtn.addEventListener('click', () => this.toggleAutoPlay());
 
-         // Keyboard navigation
-         document.addEventListener('keydown', (e) => {
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
             switch(e.key) {
                 // Next quote
                 case 'ArrowUp':
@@ -145,6 +145,18 @@ class BookQuoteShorts {
                     e.preventDefault();
                     this.toggleAutoPlay();
                     break;
+            }
+        });
+
+        // Mouse wheel support
+        this.shortsContainer.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            if (e.deltaY > 0) {
+                // Next quote
+                this.nextQuote();
+            } else {
+                // Previous quote
+                this.previousQuote();
             }
         });
     }
