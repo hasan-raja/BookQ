@@ -2,6 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -11,6 +12,8 @@ body {
     overflow: hidden;
     height: 100vh;
     user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
 }
 
 /* App Name */
@@ -150,6 +153,12 @@ body {
     color: #000;
     cursor: pointer;
     transition: all 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .action-btn {
