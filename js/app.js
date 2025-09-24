@@ -3,6 +3,7 @@ class BookQuoteShorts {
     constructor() {
         this.totalQuotes = 0;
         this.currentIndex = 0;
+        this.likes = new Map();
 
         // Set total quotes count
         if (typeof quotes !== 'undefined' && quotes) {
@@ -11,6 +12,9 @@ class BookQuoteShorts {
 
         this.initializeElements();
         this.bindEvents();
+
+        //Show the first quote
+        this.showQuote(this.currentIndex);
     }
     
     initializeElements() {
@@ -20,6 +24,8 @@ class BookQuoteShorts {
         this.quoteMeta = document.getElementById('quoteMeta');
         this.authorName = document.getElementById('authorName');
         this.bookTitle = document.getElementById('bookTitle');
+        this.likeBtn = document.getElementById('likeBtn');
+        this.likeCount = document.getElementById('likeCount');
     }
 
     bindEvents() {
@@ -46,6 +52,9 @@ class BookQuoteShorts {
             e.preventDefault();
             this.previousQuote();
         });
+
+        // Action buttons
+        this.likeBtn.addEventListener('click', () => this.toggleLike());
     }
 
     showQuote(index, direction = 'fade') {
@@ -88,6 +97,9 @@ class BookQuoteShorts {
         requestAnimationFrame(() => {
             this.shortItem.classList.add(direction);
         });
+
+        //Update like button
+        this.updateLikeButton();
     }
 
     nextQuote() {
@@ -111,11 +123,51 @@ class BookQuoteShorts {
         const prevIndex = this.currentIndex === 0 ? this.totalQuotes - 1 : this.currentIndex - 1;
         this.showQuote(prevIndex, 'slide-down-in');
     }
+
+    toggleLike() {
+        const quote = quotes[this.currentIndex];
+        const quoteId = quote.id;
+        const isLiked = this.likes.get(quoteId) || false;
+
+        this.likes.set(quoteId, !isLiked);
+
+        this.updateLikeButton();
+
+        //Add like animation
+        if(!isLiked) {
+            this.animateLike();
+        }
+    }
+
+    animateLike() {
+        const heart = this.likeBtn.querySelector('svg');
+        heart.style.transform = 'scale(1.3)';
+        heart.style.color = '#000';
+
+        setTimeout(() => {
+            heart.style.transform = 'scale(1)';
+            heart.style.color = '';
+        }, 200);
+    }
+
+    updateLikeButton() {
+        const quote = quotes[this.currentIndex];
+        const quoteId = quote.id;
+        const isLiked = this.likes.get(quoteId) || false;
+        
+        // Show current quote's like status, not total likes
+        this.likeBtn.classList.toggle('liked', isLiked);
+        this.likeCount.textContent = isLiked ? '1' : '0';
+        
+    }
          
 }
 
 //Initialize the app when the DOM is loaded
 document.addEventListener("DOMContentLoaded", () => {
-   const bookQuoteShorts = new BookQuoteShorts();
-   console.log(bookQuoteShorts.quotes.length);
+    //Small delay to ensure the DOM is loaded
+    setTimeout(() => {
+        const bookQuoteShorts = new BookQuoteShorts();
+        console.log(quotes.length);
+    }, 100);
 });
