@@ -12,6 +12,7 @@ class BookQuoteShorts {
 
         this.initializeElements();
         this.bindEvents();
+        this.loadLikesFromStorage();
 
         //Show the first quote
         this.showQuote(this.currentIndex);
@@ -26,6 +27,27 @@ class BookQuoteShorts {
         this.bookTitle = document.getElementById('bookTitle');
         this.likeBtn = document.getElementById('likeBtn');
         this.likeCount = document.getElementById('likeCount');
+    }
+
+    loadLikesFromStorage() {
+        try {
+            const storedLikes = localStorage.getItem('bookQuoteLikes');
+            if (storedLikes) {
+                const likesData = JSON.parse(storedLikes);
+                this.likes = new Map(Object.entries(likesData));
+            }
+        } catch (error) {
+            console.error('Error loading likes from storage:', error);
+        }
+    }
+
+    saveLikesToStorage() {
+        try {
+            const likesObject = Object.fromEntries(this.likes);
+            localStorage.setItem('bookQuoteLikes', JSON.stringify(likesObject));
+        } catch (error) {
+            console.error('Error saving likes to storage:', error);
+        }
     }
 
     bindEvents() {
@@ -130,7 +152,7 @@ class BookQuoteShorts {
         const isLiked = this.likes.get(quoteId) || false;
 
         this.likes.set(quoteId, !isLiked);
-
+        this.saveLikesToStorage();
         this.updateLikeButton();
 
         //Add like animation
